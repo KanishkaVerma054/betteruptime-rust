@@ -12,12 +12,16 @@ use store::{store::Store};
 pub mod request_inputs;
 pub mod request_outputs;
 pub mod routes;
+pub mod auth_middleware;
 
 #[tokio::main]
 async fn main() -> Result<(), std::io::Error> {
+
+    dotenvy::dotenv().ok();
+
     let s = Arc::new(Mutex::new(Store::new().unwrap()));
     let app = Route::new()
-        .at("/website/:website_id", get(get_website))
+        .at("/status/:website_id", get(get_website))
         .at("/website", post(create_website))
         .at("/user/signup", post(sign_up))
         .at("/user/signin", post(sign_in))
